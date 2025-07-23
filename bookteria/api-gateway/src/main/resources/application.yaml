@@ -1,26 +1,24 @@
 server:
   port: 8888
+
 app:
   api-prefix: /api/v1
 
 spring:
   application:
     name: api-gateway
-
   cloud:
     gateway:
       routes:
-        - id: identity-service
+        - id: identity_service
           uri: http://localhost:8080
           predicates:
-            - Path=${app.api-prefix}/identity/users/**
+          - Path=${app.api-prefix}/identity/**
           filters:
-            - StripPrefix=2
-            # có tác dụng http://localhost:8080/identity/** thì ta thêm 1 giá trị nào đó vào localhost:8080/**/identity/ ko bị sao
-
-        - id: profile-service
+          - StripPrefix=2
+        - id: profile_service
           uri: http://localhost:8081
           predicates:
-            - Path=${app.api-prefix}/profile/**
+          - Path=${app.api-prefix}/profile/users/**
           filters:
-            - StripPrefix=2
+          - StripPrefix=2
