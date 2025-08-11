@@ -1,9 +1,9 @@
 package com.devteria.notification.dto.request;
 
+import java.util.List;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,5 +15,4 @@ public class EmailRequest {
     List<Recepient> to;
     String subject;
     String htmlContent;
-
 }

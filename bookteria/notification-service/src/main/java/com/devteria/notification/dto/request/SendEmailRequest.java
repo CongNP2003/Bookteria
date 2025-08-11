@@ -12,5 +12,4 @@ public class SendEmailRequest {
     Recepient to;
     String subject;
     String htmlContent;
-
 }
