@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailService {
     Emailclient emailclient;
 
-    String apiKey = "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";
+    String apiKey = "Nhập token bervo api vào đây";
 
     public EmailResponse senEmail(SendEmailRequest request) {
         EmailRequest emailRequest = EmailRequest.builder()
