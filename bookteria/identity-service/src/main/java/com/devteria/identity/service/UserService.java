@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.devteria.event.dto.NotificationEvent;
 import com.devteria.identity.constant.PredefinedRole;
 import com.devteria.identity.dto.request.UserCreationRequest;
 import com.devteria.identity.dto.request.UserUpdateRequest;
@@ -27,8 +28,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +41,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     ProfileClient profileClient;
 
-    KafkaTemplate<String, String> kafkaTemplate; // cấu hình kafka sau khi tạo user thành công
-
+    KafkaTemplate<String, Object> kafkaTemplate; // cấu hình kafka sau khi tạo user thành công
 
     public UserResponse createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
@@ -62,8 +60,15 @@ public class UserService {
 
         profileClient.createProfile(profileRequest);
 
+        NotificationEvent notificationEvent = NotificationEvent.builder()
+                .Channel("EMAIL")
+                .recepient(request.getEmail())
+                .subject("Microservice send notification")
+                .body("Xin chào cậu :" + request.getUsername())
+                .build();
+
         // public message cho kafka
-        kafkaTemplate.send("Onboard-successful", "Chào mừng bạn gia nhập :" + user.getUsername());
+        kafkaTemplate.send("notification-delivery", notificationEvent);
         return userMapper.toUserResponse(user);
     }
 
