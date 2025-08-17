@@ -1,9 +1,9 @@
-package com.devteria.identity.dto.response;
-
-import java.time.LocalDate;
+package com.devteria.post.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -12,7 +12,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserProfileResponse {
     String id;
-    String userId;
     String username;
     String email;
     String firstName;
