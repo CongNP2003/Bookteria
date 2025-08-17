@@ -1,4 +1,4 @@
-package com.devteria.post.dto.response;
+package com.devteria.post.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,18 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PostResponse {
-    String id;
-    String content;
-    String userId;
-    String created;
-    Instant createdDate;
-    Instant modifiedDate;
+public class PageResponse<T> {
+    int currenPage;
+    int totalPages;
+    int pageSize;
+    long totalElements;
+
+    @Builder.Default
+    private List<T> data = Collections.emptyList();
 }
