@@ -3,11 +3,11 @@ package com.devteria.post.service;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -20,7 +20,7 @@ public class DateTimeFormatter {
         strategyMap.put(86400L, this::formatInHors);
         strategyMap.put(Long.MAX_VALUE,this::formatInDay);
     }
-    Map<Long, Function<Instant, String>> strategyMap = new HashMap<>();
+    Map<Long, Function<Instant, String>> strategyMap = new LinkedHashMap<>();
 
     public String formatInSecound (Instant instant) {
         long elapseSecound = ChronoUnit.SECONDS.between(instant, Instant.now());
@@ -45,7 +45,7 @@ public class DateTimeFormatter {
 
         var strategy = strategyMap.entrySet()
                 .stream()
-                .filter(longFunctionEntry ->elapseSecound < longFunctionEntry.getKey())
+                .filter(longFunctionEntry -> elapseSecound < longFunctionEntry.getKey())
                 .findFirst().get();
         return strategy.getValue().apply(instant);
     }

@@ -1,8 +1,6 @@
 package com.devteria.profile.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.devteria.profile.dto.ApiResponse;
 import com.devteria.profile.dto.request.ProfileCreationRequest;
@@ -23,6 +21,14 @@ public class InternalUserProfileController {
     ApiResponse<UserProfileResponse> createProfile(@RequestBody ProfileCreationRequest request) {
         return ApiResponse.<UserProfileResponse>builder()
                 .result(userProfileService.createProfile(request))
+                .build();
+    }
+
+    // đoạn này dùng để gọi tới profile của postservic để lấy ra username cho bài đăng
+    @GetMapping("/internal/users/{userId}")
+    ApiResponse<UserProfileResponse> getProile(@PathVariable String userId) {
+        return ApiResponse.<UserProfileResponse>builder()
+                .result(userProfileService.getByUserId(userId))
                 .build();
     }
 }
