@@ -1,32 +1,39 @@
 package com.devteria.file.service;
 
-import com.devteria.file.dto.ApiResponse;
-import org.springframework.security.core.parameters.P;
+import com.devteria.file.dto.FileResponse;
+import com.devteria.file.mapper.FileMgmtMapper;
+import com.devteria.file.repository.FileMgmtRepository;
+import com.devteria.file.repository.FileRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FileService {
+    FileMgmtRepository fileMgmtRepository;
+    FileRepository fileRepository;
+    FileMgmtMapper fileMgmtMapper;
 
-    public Object uploadFile (MultipartFile file) throws IOException {
-        Path folder = Paths.get("G:/image");
-        String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+    public FileResponse uploadFile(MultipartFile file) throws IOException{
+        // store lưu vào ổ cứng của máy
+        var fileInfo = fileRepository.store(file);
+        // tạo mới file và mapper về dto trả dữ liệu cho người dùng
+        var fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
 
-        String fileName = Objects.isNull(fileExtension)
-                ? UUID.randomUUID().toString()
-                : UUID.randomUUID().toString() + "." + fileExtension;
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        fileMgmt.setOwnerId(userId);
+        var fileResult = fileMgmtRepository.save(fileMgmt);
 
-        Path filePath = folder.resolve(fileName).normalize().toAbsolutePath();
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        return  null;
+        return FileResponse.builder()
+                .originalFileName(file.getOriginalFilename())
+                .url(fileInfo.getUrl())
+                .build();
     }
 }
