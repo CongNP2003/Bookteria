@@ -1,4 +1,4 @@
-package com.devteria.file.dto;
+package com.devteria.file.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class FileInfo {
     String name;
-    String contenTyppe;
+    String contenType;
     long size;
     String md5Checksum;
     String path;
