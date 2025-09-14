@@ -1,0 +1,16 @@
+package com.devteria.profile.configuration;
+
+
+import feign.codec.Encoder;
+import feign.form.spring.SpringFormEncoder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+// này dùng cho multipartFile , tức là để nhận 1 file chứ ko phải thành 1 chuỗi
+public class FeignConfiguration {
+    @Bean
+    public Encoder multipartFormEncoder() {
+        return new SpringFormEncoder();
+    }
+}
