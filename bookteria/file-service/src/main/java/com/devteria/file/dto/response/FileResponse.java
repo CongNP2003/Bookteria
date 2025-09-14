@@ -1,4 +1,4 @@
-package com.devteria.file.dto;
+package com.devteria.file.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,11 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Data
 @Builder
-public class FileInfo {
-    String name;
-    String contenType;
-    long size;
-    String md5Checksum;
-    String path;
+public class FileResponse {
+    String originalFileName;
     String url;
 }

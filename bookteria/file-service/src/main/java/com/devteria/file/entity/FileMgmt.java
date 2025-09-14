@@ -2,20 +2,21 @@ package com.devteria.file.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document(collation = "file_mgmt")
+@Document(collection = "file_mgmt")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FileMgmt {
-    @MongoId
+    @Id
     String id;
     String ownerId;
-    String contenTyppe;
+    String contenType;
     long size;
     String path;
     String md5Checksum;
