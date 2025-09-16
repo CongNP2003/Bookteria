@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface UserProfileMapper {
     UserProfile toUserProfile(ProfileCreationRequest request);
-    UserProfileResponse toUserProfileResponse(UserProfile entity);
+//    UserProfileResponse toUserProfileResponse(UserProfile entity);
     UserProfileResponse toUserProfileReponse(UserProfile entity);
     void update(@MappingTarget UserProfile entity, UpdateProfileRequest request);
 
