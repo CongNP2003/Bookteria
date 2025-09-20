@@ -61,33 +61,36 @@ public class ConversationService {
         var sortedIds = userIds.stream().sorted().toList();
         var userIdHash = generateParticipantHash(sortedIds);
 
-        List<ParticipantInfo> participantInfos = List.of(
-                ParticipantInfo.builder()
-                        .userId(userInfo.getUserId())
-                        .username(userInfo.getUsername())
-                        .lastName(userInfo.getLastName())
-                        .firstName(userInfo.getFirstName())
-                        .avatar(userInfo.getAvatar())
-                        .build(),
-                ParticipantInfo.builder()
-                        .userId(participantInfo.getUserId())
-                        .username(participantInfo.getUsername())
-                        .lastName(participantInfo.getLastName())
-                        .firstName(participantInfo.getFirstName())
-                        .avatar(participantInfo.getAvatar())
-                        .build());
+        // kiểm tra xem ParticipantHash đã tồn tại hay chưa, nếu chưa thì tạo mới
+        var conversation = conversationRepository.findByParticipantsHash(userIdHash).orElseGet(() ->{
+            List<ParticipantInfo> participantInfos = List.of(
+                    ParticipantInfo.builder()
+                            .userId(userInfo.getUserId())
+                            .username(userInfo.getUsername())
+                            .lastName(userInfo.getLastName())
+                            .firstName(userInfo.getFirstName())
+                            .avatar(userInfo.getAvatar())
+                            .build(),
+                    ParticipantInfo.builder()
+                            .userId(participantInfo.getUserId())
+                            .username(participantInfo.getUsername())
+                            .lastName(participantInfo.getLastName())
+                            .firstName(participantInfo.getFirstName())
+                            .avatar(participantInfo.getAvatar())
+                            .build());
 
-        // Build Conversation info
+            // Build Conversation info
 
-        Conversation conversation = Conversation.builder()
-                .type(request.getType())
-                .participantsHash(userIdHash)
-                .createdDate(Instant.now())
-                .modifiedDate(Instant.now())
-                .participants(participantInfos)
-                .build();
+            Conversation newConversation = Conversation.builder()
+                    .type(request.getType())
+                    .participantsHash(userIdHash)
+                    .createdDate(Instant.now())
+                    .modifiedDate(Instant.now())
+                    .participants(participantInfos)
+                    .build();
 
-        conversation = conversationRepository.save(conversation);
+            return conversationRepository.save(newConversation);
+        });
 
         return toConversationResponse(conversation);
     }
