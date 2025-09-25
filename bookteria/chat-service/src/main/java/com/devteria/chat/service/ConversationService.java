@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.SocketIOServer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
